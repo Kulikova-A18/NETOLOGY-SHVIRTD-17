@@ -1,7 +1,9 @@
 # Домашнее задание к занятию 4 «Оркестрация группой Docker контейнеров на примере Docker Compose»
 
 Cсылка на задание: https://github.com/netology-code/virtd-homeworks/blob/shvirtd-1/05-virt-03-docker-intro/README.md
+
 Выполнила: Куликова Алёна Владимировна
+
 Группа: shdevops-17_shvirtd-17
 
 ## Задача 1
