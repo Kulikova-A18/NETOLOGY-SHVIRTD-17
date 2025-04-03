@@ -1,5 +1,6 @@
 resource "yandex_compute_instance" "web" {
   count = 2  # 2 экземпляра ВМ
+
   name        = "web-${count.index + 1}"   # "web-1" и "web-2"
   platform_id = "standard-v1"              # тип виртуальной машины
   zone        = var.default_zone           # размещен экземпляр, задается из переменной
