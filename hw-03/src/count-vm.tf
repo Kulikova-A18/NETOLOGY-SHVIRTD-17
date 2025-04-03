@@ -25,6 +25,6 @@ resource "yandex_compute_instance" "web" {
   }
 
   metadata = {
-    ssh-keys = file("~/yan.pub")
+    ssh-keys = file("~/.ssh/id_ed25519.pub")
   }
 }
