@@ -1,3 +1,4 @@
+№ 2
 resource "yandex_compute_instance" "web" {
   count = 2  # 2 экземпляра ВМ
 
