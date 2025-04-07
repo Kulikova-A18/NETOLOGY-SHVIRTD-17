@@ -1,54 +1,76 @@
-variable "each_vm" {
+variable "os_image" {
+  type    = string
+  default = "ubuntu-2004-lts"
+}
+
+data "yandex_compute_image" "ubuntu" {
+  family = var.os_image
+}
+
+# Переменная для настройки ресурсов виртуальных машин
+variable "vm_resources" {
   type = list(object({
-    vm_name    = string
-    cpu        = number
-    ram        = number
-    disk_volume = number
+    vm_name     = string          # Имя ВМ
+    cpu         = number          # Количество ядер
+    ram         = number          # Объем памяти
+    disk        = number          # Размер диска
+    platform_id = string          # Идентификатор платформы
   }))
+
   default = [
     {
-      vm_name    = "main"
-      cpu        = 2
-      ram        = 4
-      disk_volume = 20
+      vm_name     = "main"         # Имя ВМ
+      cpu         = 2              # Количество ядер
+      ram         = 2              # Объем памяти
+      disk        = 5              # Размер диска
+      platform_id = "standard-v1"  # Идентификатор платформы
     },
     {
-      vm_name    = "replica"
-      cpu        = 2
-      ram        = 2
-      disk_volume = 21
-    }
+      vm_name     = "replica"      # Имя реплики ВМ
+      cpu         = 2              # Количество ядер
+      ram         = 2              # Объем памяти
+      disk        = 10             # Размер диска
+      platform_id = "standard-v1"  # Идентификатор платформы
+    },
   ]
 }
 
-resource "yandex_compute_instance" "db" {
-  for_each = { for v in var.each_vm : v.vm_name => v }
+locals {
+  ssh_keys = file("~/.ssh/id_ed25519.pub")
+}
 
-  name        = each.value.vm_name
-  platform_id = "standard-v1"
-  zone        = var.default_zone
+resource "yandex_compute_instance" "instances" {
+  depends_on = [yandex_compute_instance.web]
+
+  for_each = { for vm in var.vm_resources : vm.vm_name => vm }
+  
+  name        = each.value.vm_name                   # Имя ВМ
+  platform_id = each.value.platform_id               # Идентификатор платформы
+
+  resources {
+    cores  = each.value.cpu                           # Количество ядер
+    memory = each.value.ram                           # Объем памяти
+  }
 
   boot_disk {
     initialize_params {
-      image_id = "fd8chrq89mmk8tqm85r8"
-      size     = each.value.disk_volume
-      type     = "network-hdd"
+      image_id = data.yandex_compute_image.ubuntu.image_id  # ID образа для загрузочного диска
+      size     = each.value.disk                            # Размер диска
     }
   }
 
-  network_interface {
-    subnet_id = yandex_vpc_subnet.develop.id
-    nat       = true
-
-    security_group_ids = ["enpce7huph0t1kvtivnk"]
-  }
-
-  resources {
-    memory = each.value.ram
-    cores  = each.value.cpu
-  }
-
   metadata = {
-    ssh-keys = file("~/.ssh/id_ed25519.pub")
+    ssh-keys           = local.ssh_keys
+    serial-port-enable = "1"
+  }
+
+  network_interface {
+    subnet_id          = yandex_vpc_subnet.develop.id
+    nat                = true
+    security_group_ids = [yandex_vpc_security_group.example.id]
+  }
+
+  scheduling_policy {
+    preemptible = true
   }
 }
