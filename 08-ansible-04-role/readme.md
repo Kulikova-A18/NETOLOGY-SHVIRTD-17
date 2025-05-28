@@ -2,26 +2,9 @@
 
 Выполнила Куликова Алёна Владимировна
 
-# playbook
+| Название       | Описание                                                                                                   | Ссылка                                                                                                               | Команда для скачивания                          |
+|---------------------|----------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------|-----------------------------------------------------|
+| Playbook        | Плейбук для установки сервисов: Clickhouse, Vector и Lighthouse.                                             | Playbook на GitHub (https://github.com/Kulikova-A18/NETOLOGY-SHVIRTD-17/tree/main/08-ansible-04-role/playbook)       | N/A                                                 |
+| Vector Role     | Роль для установки и настройки Vector.                                                                         | Vector Role на GitHub (https://github.com/Kulikova-A18/vector-role)                                                  | git clone git@github.com:Kulikova-A18/vector-role.git |
+| Lighthouse Role | Роль для установки и настройки Lighthouse.                                                                     | Lighthouse Role на GitHub (https://github.com/Kulikova-A18/vector-role)                                              | git clone git@github.com:Kulikova-A18/lighthouse-role.git                                                |
 
-playbook располагается по следующей ссылке: https://github.com/Kulikova-A18/NETOLOGY-SHVIRTD-17/tree/main/08-ansible-04-role/playbook
-
-# vector-role
-
-vector-role располагается по следующей ссылке: https://github.com/Kulikova-A18/vector-role
-
-Команда для скачивания осуществляется со следующей вставленой ссылкой:
-
-```
-git@github.com:Kulikova-A18/vector-role.git
-```
-
-# lighthouse-role
-
-lighthouse-role располагается по следующей ссылке: https://github.com/Kulikova-A18/vector-role
-
-Команда для скачивания осуществляется со следующей вставленой ссылкой:
-
-```
-git@github.com:Kulikova-A18/lighthouse-role.git
-```
