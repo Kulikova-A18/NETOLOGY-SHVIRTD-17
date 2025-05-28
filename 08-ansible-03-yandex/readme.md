@@ -27,3 +27,92 @@
 Выполненное домашнее задание пришлите в виде ссылки на .md-файл в вашем репозитории.
 
 ---
+
+# Выполнение
+
+### пункт 1-3
+
+Дописан еще play, который устанавливает LightHouse. 
+
+Используются модули:
+
+* get_url
+* template
+* yum
+* service
+* file
+
+Происходит установка и конфигурирование веб-сервера Nginx, установка и конфигурирование LightHouse, запуск служб Nginx и LightHouse.
+
+### пункт 4
+
+Подготовка  inventory-файл prod.yml (смотреть https://github.com/Kulikova-A18/NETOLOGY-SHVIRTD-17/blob/main/08-ansible-03-yandex/playbook/inventory/prod.yml)
+
+```
+---
+clickhouse:
+  hosts:
+    centos7-1:
+      ansible_host: 158.160.109.207
+vector:
+  hosts:
+    centos7-2:
+      ansible_host: 158.160.102.153
+lighthouse:
+  hosts:
+    centos7-3:
+      ansible_host: 158.160.113.245
+```
+
+### пункт 5
+
+Запущен ```ansible-lint site.yml```
+
+Были ошибки в использовании старых наименований модулей, отсутствии прав на скачиваемые или создаваемые файлы. Ошибки исправлены.
+
+### пункт 6
+
+Запущен playbook с флагом ```--check```. 
+
+Выполнение playbook завершилось с ошибкой, т.к. этот флаг не вносит изменения в системы, а выполнение playbook требует скачивания и установки пакетов приложений.
+
+### пункт 7
+
+Запущен playbook на prod.yml окружении с флагом ```--diff```. Изменения в систему внесены:
+
+Фрагмент:
+
+```
+PLAY RECAP ************************************************************************************
+centos 7-1    :  ok=6  changed=4   unreachable=0  failed=0  skipped=0  rescued=1  ignored=0
+centos7-2     :  ok=5  changed=4   unreachable=0  failed=0  skipped=0  rescued=0  ignored=0
+centos 7-3    :  ok=11  changed=9  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0
+```
+
+### пункт 8
+
+Повторный запуск playbook с флагом ```--diff```. 
+
+Playbook идемпотентен. 
+
+Изменения связаны с перезапуском сервиса Vector.
+
+Фрагмент:
+
+```
+TASK [Vector | Start service] *********************************************************************
+changed: [centos7-2]
+
+PLAY RECAP ****************************************************************************************
+centos 7-1    :  ok=6  changed=4   unreachable=0  failed=0  skipped=0  rescued=1  ignored=0
+centos7-2     :  ok=5  changed=4   unreachable=0  failed=0  skipped=0  rescued=0  ignored=0
+centos 7-3    :  ok=11  changed=9  unreachable=0  failed=0  skipped=0  rescued=0  ignored=0
+```
+
+### пункт 9
+
+README.md-файл по playbook:
+
+https://github.com/Kulikova-A18/NETOLOGY-SHVIRTD-17/blob/main/08-ansible-03-yandex/playbook/README.md
+
+
