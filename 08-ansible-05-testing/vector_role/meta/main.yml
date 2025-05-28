@@ -1,0 +1,17 @@
+galaxy_info:
+  author: Slava E.
+  namespace: my_galaxy_namespace
+  role-name: vector_role
+  description: Role for install Vector.
+  company: Netology
+  license: MIT
+  min_ansible_version: 2.1
+  platforms:
+    - name: Centos
+      versions:
+        - 7
+        - 8
+  galaxy_tags: [
+    vector,
+    install
+  ]
