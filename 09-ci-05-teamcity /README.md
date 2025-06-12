@@ -1,40 +1,95 @@
 # Домашнее задание к занятию 11 «Teamcity»
 
-## Подготовка к выполнению
+Произвела подготовку к выполнению задания, а именно запустила сервер TeamCity и агент TeamCity. Заходила вручную и вводить следующую команду:
 
-1. В Yandex Cloud создайте новый инстанс (4CPU4RAM) на основе образа `jetbrains/teamcity-server`.
-2. Дождитесь запуска teamcity, выполните первоначальную настройку.
-3. Создайте ещё один инстанс (2CPU4RAM) на основе образа `jetbrains/teamcity-agent`. Пропишите к нему переменную окружения `SERVER_URL: "http://<teamcity_url>:8111"`.
-4. Авторизуйте агент.
-5. Сделайте fork [репозитория](https://github.com/aragastmatb/example-teamcity).
-6. Создайте VM (2CPU4RAM) и запустите [playbook](./infrastructure).
+```
+docker run -d -e SERVER_URL="http://58.150.79.46:8111" jetbrains/teamcity-agent
+```
 
-## Основная часть
+Создала новый проект на основе форка репозитория, указанного в задании. Для этого я создала свой собственный репозиторий на GitHub и сделала копию предложенного репозитория.
 
-1. Создайте новый проект в teamcity на основе fork.
-2. Сделайте autodetect конфигурации.
-3. Сохраните необходимые шаги, запустите первую сборку master.
-4. Поменяйте условия сборки: если сборка по ветке `master`, то должен происходит `mvn clean deploy`, иначе `mvn clean test`.
-5. Для deploy будет необходимо загрузить [settings.xml](./teamcity/settings.xml) в набор конфигураций maven у teamcity, предварительно записав туда креды для подключения к nexus.
-6. В pom.xml необходимо поменять ссылки на репозиторий и nexus.
-7. Запустите сборку по master, убедитесь, что всё прошло успешно и артефакт появился в nexus.
-8. Мигрируйте `build configuration` в репозиторий.
-9. Создайте отдельную ветку `feature/add_reply` в репозитории.
-10. Напишите новый метод для класса Welcomer: метод должен возвращать произвольную реплику, содержащую слово `hunter`.
-11. Дополните тест для нового метода на поиск слова `hunter` в новой реплике.
-12. Сделайте push всех изменений в новую ветку репозитория.
-13. Убедитесь, что сборка самостоятельно запустилась, тесты прошли успешно.
-14. Внесите изменения из произвольной ветки `feature/add_reply` в `master` через `Merge`.
-15. Убедитесь, что нет собранного артефакта в сборке по ветке `master`.
-16. Настройте конфигурацию так, чтобы она собирала `.jar` в артефакты сборки.
-17. Проведите повторную сборку мастера, убедитесь, что сбора прошла успешно и артефакты собраны.
-18. Проверьте, что конфигурация в репозитории содержит все настройки конфигурации из teamcity.
-19. В ответе пришлите ссылку на репозиторий.
+Настроила автоматическое обнаружение конфигурации, которое успешно идентифицировало настройки Maven. Первая сборка в ветке master прошла без ошибок, и все тесты были успешно выполнены/
 
----
+Затем я внесла изменения в условия сборки.
 
-### Как оформить решение задания
+Загрузила файл settings.xml, при этом креденциалы для подключения к Nexus оставила стандартными (admin/admin123).
 
-Выполненное домашнее задание пришлите в виде ссылки на .md-файл в вашем репозитории.
+В файле pom.xml добавила ссылку на репозиторий Nexus и сделала пуш изменений в свой репозиторий на GitHub. После этого запустила сборку в ветке master и убедилась, что она завершилась успешно.
 
----
+Далее я мигрировала конфигурацию сборки в репозиторий.
+
+Создала отдельную ветку add_reply в репозитории на GitHub, чтобы работать над новыми изменениями.
+
+В этой ветке я реализовала новый метод ```sayWelcomeNew()``` для класса Welcomer (https://github.com/Kulikova-A18/09-ci-05-teamcity_example-teamcity/blob/master/src/main/java/plaindoll/Welcomer.java)
+
+```
+package plaindoll;
+
+public class Welcomer{
+	public String sayWelcome() {
+		return "Welcome home, good hunter. What is it your desire?";
+	}
+	public String sayFarewell() {
+		return "Farewell, good hunter. May you find your worth in waking world.";
+	}
+	public String sayNeedGold(){
+		return "Not enough gold";
+	}
+	public String saySome(){
+		return "something in the way";
+	}
+	public String sayWelcomeNew(){
+		return "Welcome NEW home. What is it your desire!!!";
+	}
+}
+```
+
+А также я написала тест для нового метода ``` welcomerSaysWelcomeNEW() ``` в классе Welcomer, чтобы убедиться в его корректной работе (https://github.com/Kulikova-A18/09-ci-05-teamcity_example-teamcity/blob/master/src/test/java/plaindoll/WelcomerTest.java)
+
+```
+package plaindoll;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
+
+public class WelcomerTest {
+	
+	private Welcomer welcomer = new Welcomer();
+
+	@Test
+	public void welcomerSaysWelcome() {
+		assertThat(welcomer.sayWelcome(), containsString("Welcome"));
+	}
+	@Test
+	public void welcomerSaysFarewell() {
+		assertThat(welcomer.sayFarewell(), containsString("Farewell"));
+	}
+	@Test
+	public void welcomerSaysHunter() {
+		assertThat(welcomer.sayWelcome(), containsString("hunter"));
+		assertThat(welcomer.sayFarewell(), containsString("hunter"));
+	}
+	@Test
+	public void welcomerSaysSilver(){
+		assertThat(welcomer.sayNeedGold(), containsString("gold"));
+	}
+	@Test
+	public void welcomerSaysSomething(){
+		assertThat(welcomer.saySome(), containsString("something"));
+	}
+	@Test
+	public void welcomerSaysWelcomeNEW(){
+		assertThat(welcomer.sayWelcomeNEW(), containsString("NEW"));
+	}
+}
+```
+
+После этого сделала пуш изменений в репозиторий. Сборка была запущена автоматически, и после исправления некоторых ошибок тесты прошли успешно.
+
+Затем я выполнила слияние ветки add_reply с веткой master, чтобы интегрировать новые изменения.
+
+Как я понимаю, Maven автоматически собирает .jar файл в артефакты сборки. Это подтверждает успешное выполнение всех этапов процесса сборки и тестирования.
+
+Ссылка: https://github.com/Kulikova-A18/09-ci-05-teamcity_example-teamcity/tree/master
