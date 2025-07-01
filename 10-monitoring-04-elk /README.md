@@ -44,21 +44,37 @@ Filebeat следует сконфигурировать для отправки
 - docker-compose манифест (если вы не использовали директорию help);
 - ваши yml-конфигурации для стека (если вы не использовали директорию help).
 
+```
+$ sudo docker ps -a
+[sudo] password for alyona: 
+CONTAINER ID   IMAGE                    COMMAND                  CREATED       STATUS             PORTS                                                                                            NAMES
+3e7b82458050   elastic/filebeat:8.7.0   "/usr/bin/tini -- /u…"   2 hours ago   Up About an hour                                                                                                    filebeat
+bcdb8b188426   kibana:8.7.0             "/bin/tini -- /usr/l…"   2 hours ago   Up About an hour   0.0.0.0:5601->5601/tcp, :::5601->5601/tcp                                                        kibana
+5606f9b35cc8   logstash:8.7.0           "/usr/local/bin/dock…"   2 hours ago   Up About an hour   0.0.0.0:5044->5044/tcp, :::5044->5044/tcp, 0.0.0.0:5046->5046/tcp, :::5046->5046/tcp, 9600/tcp   logstash
+0b48b4455061   elasticsearch:8.7.0      "/bin/tini -- /usr/l…"   2 hours ago   Up About an hour   0.0.0.0:9200->9200/tcp, :::9200->9200/tcp, 9300/tcp                                              es-hot
+051f07c0923a   elasticsearch:8.7.0      "/bin/tini -- /usr/l…"   2 hours ago   Up About an hour   9200/tcp, 9300/tcp                                                                               051f07c0923a_es-warm
+48eeb88405b1   python:3.9-alpine        "python3 /opt/run.py"    2 hours ago   Up About an hour   
+```
+
+![image](https://github.com/user-attachments/assets/cc05e13e-1c37-4e9a-8b9b-d95218ef7bff)
+
 ## Задание 2
 
 Перейдите в меню [создания index-patterns  в kibana](http://localhost:5601/app/management/kibana/indexPatterns/create) и создайте несколько index-patterns из имеющихся.
 
+![image](https://github.com/user-attachments/assets/613d0363-a5de-4fdb-9ec4-bdd77a657949)
+
+![image](https://github.com/user-attachments/assets/410da829-e671-4619-bd23-56fbde99a69d)
+
 Перейдите в меню просмотра логов в kibana (Discover) и самостоятельно изучите, как отображаются логи и как производить поиск по логам.
+
+![image](https://github.com/user-attachments/assets/4b089c41-b425-4cc6-ac34-a9d428da1e5e)
 
 В манифесте директории help также приведенно dummy-приложение, которое генерирует рандомные события в stdout-контейнера.
 Эти логи должны порождать индекс logstash-* в elasticsearch. Если этого индекса нет — воспользуйтесь советами и источниками из раздела «Дополнительные ссылки» этого задания.
+
+![image](https://github.com/user-attachments/assets/9ffc887f-7b9b-4411-bc50-1a141e80ab31)
  
----
 
-### Как оформить решение задания
-
-Выполненное домашнее задание пришлите в виде ссылки на .md-файл в вашем репозитории.
-
----
 
  
